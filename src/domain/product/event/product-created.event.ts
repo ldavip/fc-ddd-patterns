@@ -1,11 +1,13 @@
-import EventInterface from "../../@shared/event/event.interface";
+import { AbstractEvent } from "../../@shared/event/abstract-event";
 
-export default class ProductCreatedEvent implements EventInterface {
-  dataTimeOccurred: Date;
-  eventData: any;
+export interface ProductCreatedEventData {
+  name: string;
+  description: string;
+  price: number;
+}
 
-  constructor(eventData: any) {
-    this.dataTimeOccurred = new Date();
-    this.eventData = eventData;
+export default class ProductCreatedEvent extends AbstractEvent<ProductCreatedEventData> {
+  constructor(eventData: ProductCreatedEventData) {
+    super(eventData);
   }
 }
