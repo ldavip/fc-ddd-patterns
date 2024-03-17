@@ -46,4 +46,12 @@ export default class Order {
   total(): number {
     return this._items.reduce((acc, item) => acc + item.total(), 0);
   }
+
+  removeItem(id: string): void {
+    this._items = this._items.filter(item => item.id !== id);
+  }
+
+  addItem(item: OrderItem): void {
+    this._items.push(item);
+  }
 }
