@@ -56,6 +56,7 @@ export default class OrderRepository {
           where: {
             id,
           },
+          include: ["items"],
           rejectOnEmpty: true,
         })
       );
