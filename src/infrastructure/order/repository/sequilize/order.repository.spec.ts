@@ -11,9 +11,11 @@ import ProductRepository from "../../../product/repository/sequelize/product.rep
 import OrderItemModel from "./order-item.model";
 import OrderModel from "./order.model";
 import OrderRepository from "./order.repository";
+import OrderRepositoryInterface from "../../../../domain/checkout/repository/order-repository.interface";
 
 describe("Order repository test", () => {
   let sequelize: Sequelize;
+  let orderRepository: OrderRepositoryInterface;
 
   beforeEach(async () => {
     sequelize = new Sequelize({
@@ -30,6 +32,8 @@ describe("Order repository test", () => {
       ProductModel,
     ]);
     await sequelize.sync();
+
+    orderRepository = new OrderRepository();
   });
 
   afterEach(async () => {
@@ -46,7 +50,6 @@ describe("Order repository test", () => {
 
     const order = new Order("123", customer.id, [orderItem]);
 
-    const orderRepository = new OrderRepository();
     await orderRepository.create(order);
 
     const orderModel = await OrderModel.findOne({
@@ -81,7 +84,6 @@ describe("Order repository test", () => {
 
     const order = new Order("123", customer.id, [orderItem]);
 
-    const orderRepository = new OrderRepository();
     await orderRepository.create(order);
 
     const orderModel = await OrderModel.findOne({
@@ -148,7 +150,6 @@ describe("Order repository test", () => {
 
     const order = new Order("123", customer.id, [orderItem]);
 
-    const orderRepository = new OrderRepository();
     await orderRepository.create(order);
 
     const result = await orderRepository.find("123");
@@ -157,16 +158,12 @@ describe("Order repository test", () => {
   });
 
   it("should throw an error when order is not found", async () => {
-    const orderRepository = new OrderRepository();
-
     expect(async () => {
       await orderRepository.find("456ABC");
     }).rejects.toThrow("Order not found");
   });
 
   it("should find all orders", async () => {
-    const orderRepository = new OrderRepository();
-
     const customer: Customer = await createCustomer();
     const product1: Product = await createProduct(
       new Product("1", "Product 1", 10)
